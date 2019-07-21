@@ -14,19 +14,7 @@ module.exports = app => {
   });
 
   app.get("/api/blogs", requireLogin, async (req, res) => {
-    // Check if redis has cahced data
-    // const cahcedBlogs = await client.get(req.user.id);
-
-    // if (cahcedBlogs) {
-    //   console.log("serving from cahce");
-    //   res.send(JSON.parse(cahcedBlogs));
-    //   return;
-    // }
-
-    const blogs = await Blog.find({ _user: req.user.id });
-
-    // console.log("serving from DB");
-    // client.set(req.user.id, JSON.stringify(blogs));
+    const blogs = await Blog.find({ _user: req.user.id }).cache();
 
     res.send(blogs);
   });
