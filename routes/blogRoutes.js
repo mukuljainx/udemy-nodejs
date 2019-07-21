@@ -26,13 +26,15 @@ module.exports = app => {
     if (cahcedBlogs) {
       console.log("serving from cahce");
       res.send(JSON.parse(cahcedBlogs));
+      return;
     }
 
     const blogs = await Blog.find({ _user: req.user.id });
 
     console.log("serving from DB");
-    res.send(blogs);
     client.set(req.user.id, JSON.stringify(blogs));
+
+    res.send(blogs);
   });
 
   app.post("/api/blogs", requireLogin, async (req, res) => {
